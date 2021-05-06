@@ -13,7 +13,7 @@ Michele Alessandra Rodrigues
 
 Natalia Zoratti
 
-Patrícia Batalha Simão
+[Patrícia Batalha Simão](https://github.com/patriciabatalha)
 
 
 
