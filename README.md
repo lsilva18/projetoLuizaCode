@@ -11,7 +11,7 @@ Lara Milena Custódio Rezende
 
 Michele Alessandra Rodrigues
 
-Natalia Zoratti
+[Natalia Zoratti](https://github.com/natizoratti)
 
 [Patrícia Batalha Simão](https://github.com/patriciabatalha)
 
