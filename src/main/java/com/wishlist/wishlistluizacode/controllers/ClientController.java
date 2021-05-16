@@ -1,47 +1,37 @@
 package com.wishlist.wishlistluizacode.controllers;
 
+import com.wishlist.wishlistluizacode.entities.Client;
+import com.wishlist.wishlistluizacode.services.ClientService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping(value = "/api")
 public class ClientController {
 
-    // Add client
     @Autowired
     private ClientService clientService;
 
+
     @PostMapping("/client")
-    public Client saveClient(@RequestBody Client client){
+    public Client saveClient(@RequestBody Client client) {
         return clientService.save(client);
     }
 
-    // Find all
+    @GetMapping("/client")
+    public List<Client> findAll() {
+        return clientService.findAll();
+    }
 
-
-
-    // Find by name
     @GetMapping("/client/{name}")
-    public Client getClient(@PathVariable(value = "name") String name){
-        return clienteService.get(name);
+    public List<Client> getClient(@PathVariable(value = "name") String name) {
+        return clientService.findByName(name);
     }
 
-    // Delete
-
-    @RequestMapping( value=delete/{id}, method = RequestMethod.POST)
-    public void delete(@RequestParam("id")Long id) {
-
-        Convidado client = clientRepository.findOne(id);
-
-        clientRepository.delete(client);
-
+    @DeleteMapping("/client/{id}")
+    public void deleteById(@PathVariable Long id) {
+        clientService.deleteById(id);
     }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
 }

@@ -1,13 +1,10 @@
 package com.wishlist.wishlistluizacode.controllers;
-
-
 import com.wishlist.wishlistluizacode.entities.Product;
 import com.wishlist.wishlistluizacode.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -22,7 +19,7 @@ public class ProductController {
     }
 
     @GetMapping("/product")
-    public List<Product> findAlll() {
+    public List<Product> findAll() {
         return productService.findAll();
     }
 
@@ -32,8 +29,8 @@ public class ProductController {
     }
 
     @DeleteMapping("/product/{id}")
-    public void delete(@RequestBody Product product) {
-        productService.delete(product);
+    public void delete(@PathVariable Long id) {
+        productService.deleteById(id);
     }
 
 }
