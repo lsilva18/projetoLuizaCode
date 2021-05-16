@@ -55,7 +55,7 @@ public class WishListService {
         return null;
     }
 
-    public void delete(WishList wishList) {
-        wishListRepository.delete(wishList);
+    public void deleteById(Long id) {
+        wishListRepository.deleteById(id);
     }
 }

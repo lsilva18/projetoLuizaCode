@@ -1,6 +1,7 @@
 package com.wishlist.wishlistluizacode.entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -13,10 +14,10 @@ public class WishList {
     @OneToOne
     private Client client;
 
-    @OneToMany
-    private List<Product> products;
+    @ManyToMany
+    private List<Product> products = new ArrayList<>();
 
-    public WishList(){
+    public WishList() {
     }
 
     public WishList(Long id, Client client, List<Product> products) {
@@ -47,6 +48,22 @@ public class WishList {
 
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    public boolean addProduct(Product product) {
+        if (!products.contains(product)) {
+            products.add(product);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeProduct(Product product) {
+        if (products.contains(product)) {
+            products.remove(product);
+            return true;
+        }
+        return false;
     }
 
     @Override
