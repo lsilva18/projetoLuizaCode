@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClientService {
@@ -15,26 +16,26 @@ public class ClientService {
     @Autowired
     private ClientRepository clientRepository;
 
-    // Add client
-    public Client save(Client client){
+    public Client save(Client client) {
         return clientRepository.save(client);
     }
 
-    // Find all
-    public List<Client> findAll(){
+    public List<Client> findAll() {
         Iterable<Client> iterable = clientRepository.findAll();
         List<Client> clients = new ArrayList<>();
         iterable.forEach(clients::add);
         return clients;
     }
 
-    // Find by name
-    public List<Client> findByName(String name){
+    public List<Client> findByName(String name) {
         return clientRepository.findByName(name);
     }
 
-    // Delete
-    public void delete(Client client){
-        clientRepository.delete(client);
+    public Optional<Client> findById(Long id) {
+        return clientRepository.findById(id);
+    }
+
+    public void deleteById(Long id) {
+        clientRepository.deleteById(id);
     }
 }
