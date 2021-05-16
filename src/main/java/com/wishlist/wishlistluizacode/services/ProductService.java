@@ -8,33 +8,33 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService {
-
     @Autowired
     private ProductRepository productRepository;
 
-    // Add product
-    public Product save(Product product){
+    public Product save(Product product) {
         return productRepository.save(product);
     }
 
-    // Find all
-    public List<Product> findAll(){
+    public List<Product> findAll() {
         Iterable<Product> iterable = productRepository.findAll();
         List<Product> products = new ArrayList<>();
         iterable.forEach(products::add);
         return products;
     }
 
-    // Find by name
-    public List<Product> findByName(String name){
+    public List<Product> findByName(String name) {
         return productRepository.findByName(name);
     }
 
-    // Delete
-    public void delete(Product product){
-        productRepository.delete(product);
+    public Optional<Product> findById(Long id) {
+        return productRepository.findById(id);
+    }
+
+    public void deleteById(Long id) {
+        productRepository.deleteById(id);
     }
 }
