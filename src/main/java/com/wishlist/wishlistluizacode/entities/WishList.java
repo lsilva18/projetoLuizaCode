@@ -51,15 +51,19 @@ public class WishList {
     }
 
     public boolean addProduct(Product product) {
-        if (!products.contains(product)) {
+        if (!hasProduct(product)) {
             products.add(product);
             return true;
         }
         return false;
     }
 
+    public boolean hasProduct(Product product){
+        return products.contains(product);
+    }
+
     public boolean removeProduct(Product product) {
-        if (products.contains(product)) {
+        if (hasProduct(product)) {
             products.remove(product);
             return true;
         }

@@ -9,6 +9,7 @@ import com.wishlist.wishlistluizacode.services.ProductService;
 import com.wishlist.wishlistluizacode.services.WishListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -45,22 +46,30 @@ public class WishListController {
     }
 
     @GetMapping("/wishlist/{id}")
-    public ResponseEntity<WishList> findById(@PathVariable Long id){
+    public ResponseEntity<WishList> findById(@PathVariable Long id) {
         Optional<WishList> optional = wishListService.findById(id);
-        if(optional.isPresent())
+        if (optional.isPresent())
             return ResponseEntity.ok().body(optional.get());
         else
             return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/wishlist/nameClient/{name}")
-    public ResponseEntity<List<WishList>> findByClientName(@PathVariable String name){
-        return ResponseEntity.ok().body(wishListService.findByClientName(name));
+    @GetMapping("/wishlist/client/name/{name}")
+    public ResponseEntity<List<WishList>> findByClientName(@PathVariable String name) {
+        List<WishList> wishLists = wishListService.findByClientName(name);
+        if (CollectionUtils.isEmpty(wishLists))
+            return ResponseEntity.notFound().build();
+        else
+            return ResponseEntity.ok().body(wishLists);
     }
 
-    @GetMapping("/wishlist/idClient/{id}")
-    public ResponseEntity<WishList> findByClientId(@PathVariable Long id){
-        return ResponseEntity.ok().body(wishListService.findByClientId(id));
+    @GetMapping("/wishlist/client/id/{id}")
+    public ResponseEntity<WishList> findByClientId(@PathVariable Long id) {
+        WishList wishList = wishListService.findByClientId(id);
+        if (wishList == null)
+            return ResponseEntity.notFound().build();
+        else
+            return ResponseEntity.ok().body(wishList);
     }
 
     @DeleteMapping("/wishlist/{id}")
@@ -68,25 +77,39 @@ public class WishListController {
         wishListService.deleteById(id);
     }
 
+    @GetMapping("/wishlist/client/{clientId}/product/{productId}")
+    public ResponseEntity<Boolean> checkProductExistsByClientAndProduct(@PathVariable Long clientId, @PathVariable Long productId){
+        WishList wishList = wishListService.findByClientId(clientId);
+        if (wishList == null)
+            return ResponseEntity.notFound().build();
+
+        Optional<Product> optionalProduct = productService.findById(productId);
+        if (!optionalProduct.isPresent())
+            return ResponseEntity.notFound().build();
+
+        return ResponseEntity.ok().body(wishList.hasProduct(optionalProduct.get()));
+    }
+
+
     @PostMapping("/wishlist/product")
-    public ResponseEntity addProduct(@Valid @RequestBody ProductWishListDTO dto){
+    public ResponseEntity addProduct(@Valid @RequestBody ProductWishListDTO dto) {
         Optional<Client> optionalClient = clientService.findById(dto.getClientId());
         if (optionalClient.isEmpty())
             return ResponseEntity.notFound().build();
 
         Optional<Product> optionalProduct = productService.findById(dto.getProductId());
-        if(!optionalProduct.isPresent())
+        if (!optionalProduct.isPresent())
             return ResponseEntity.notFound().build();
 
         WishList wishList = wishListService.findByClientId(dto.getClientId());
-        if (wishList == null){
+        if (wishList == null) {
             wishList = new WishList();
             wishList.setClient(optionalClient.get());
         }
-        if(!wishList.addProduct(optionalProduct.get()))
+        if (!wishList.addProduct(optionalProduct.get()))
             return ResponseEntity.badRequest().body("The product is already in the list");
 
-        if(wishList.getProducts().size() >= MAXSIZE)
+        if (wishList.getProducts().size() >= MAXSIZE)
             return ResponseEntity.badRequest().body("Your list is already full");
 
         wishList = wishListService.save(wishList);
@@ -94,7 +117,7 @@ public class WishListController {
     }
 
     @DeleteMapping("/wishlist/product")
-    public ResponseEntity removeProduct(@Valid @RequestBody ProductWishListDTO dto){
+    public ResponseEntity removeProduct(@Valid @RequestBody ProductWishListDTO dto) {
         Optional<Client> optionalClient = clientService.findById(dto.getClientId());
         if (optionalClient.isEmpty())
             return ResponseEntity.notFound().build();
@@ -107,7 +130,7 @@ public class WishListController {
         if (!optionalProduct.isPresent())
             return ResponseEntity.notFound().build();
 
-        if(!wishList.removeProduct(optionalProduct.get()))
+        if (!wishList.removeProduct(optionalProduct.get()))
             return ResponseEntity.badRequest().body("Product does not exists in the wishlist");
 
         wishList = wishListService.save(wishList);

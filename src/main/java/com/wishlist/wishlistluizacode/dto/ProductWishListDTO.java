@@ -3,6 +3,7 @@ package com.wishlist.wishlistluizacode.dto;
 import javax.validation.constraints.NotNull;
 
 public class ProductWishListDTO {
+
     @NotNull
     private Long clientId;
     @NotNull
