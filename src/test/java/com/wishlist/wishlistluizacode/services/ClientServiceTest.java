@@ -35,7 +35,7 @@ public class ClientServiceTest {
         List<Client> before = clientService.findAll();
         Client client = createNewClient("shouldFindAllClients", "1234");
         List<Client> after = clientService.findAll();
-        assertTrue(before.size() < after.size());
+        assertTrue(before.size() == after.size() - 1);
         assertTrue(after.contains(client));
     }
 
