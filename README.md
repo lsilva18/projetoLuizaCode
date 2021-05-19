@@ -9,10 +9,6 @@ Integrantes:
 
 [Lívia Cristina da Silva Santos](https://github.com/lsilva18)
 
-Michele Alessandra Rodrigues
-
-[Natalia Zoratti](https://github.com/natizoratti)
-
 [Patrícia Batalha Simão](https://github.com/patriciabatalha)
 
 
