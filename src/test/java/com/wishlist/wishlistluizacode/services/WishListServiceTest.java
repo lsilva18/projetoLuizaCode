@@ -4,19 +4,15 @@ import com.wishlist.wishlistluizacode.entities.Client;
 import com.wishlist.wishlistluizacode.entities.Product;
 import com.wishlist.wishlistluizacode.entities.WishList;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
-@TestPropertySource("/application-test.properties")
 class WishListServiceTest {
 
     @Autowired
@@ -49,7 +45,8 @@ class WishListServiceTest {
         if (productList.isEmpty()) {
             Product product = new Product(name, description);
             productService.save(product);
-        } return productList;
+        }
+        return productList;
     }
 
     @Test
@@ -62,22 +59,65 @@ class WishListServiceTest {
     }
 
     @Test
-    void findAll() {
+    void findAllWishlists() {
+        List<WishList> before = wishListService.findAll();
+        WishList wishList = createNewWishList(
+                createOrGetClient("createOrGetClient", "123456"),
+                createOrGetProduct("createOrGetProduct", "createOrGetProduct"));
+        List<WishList> after = wishListService.findAll();
+        assertTrue(before.size() == after.size() - 1);
+        assertTrue(after.contains(wishList));
     }
 
     @Test
-    void findById() {
+    void findWishlistById() {
+        WishList wishList = createNewWishList(
+                createOrGetClient("createOrGetClient", "123456"),
+                createOrGetProduct("createOrGetProduct", "createOrGetProduct"));
+        assertNotNull(wishList.getId());
+        Optional<WishList> wishListOptional = wishListService.findById(wishList.getId());
+        assertTrue(wishListOptional.isPresent());
+        assertEquals(wishList.getId(), wishListOptional.get().getId());
     }
 
     @Test
     void findByClientName() {
+        Client client = createOrGetClient("createOrGetClient", "123456");
+        WishList wishList = createNewWishList(
+                client,
+                createOrGetProduct("createOrGetProduct", "createOrGetProduct"));
+        assertNotNull(wishList.getId());
+
+        List<WishList> wishLists = wishListService.findByClientName(client.getName());
+
+        assertEquals(wishLists.size(), 1);
+        assertEquals(wishLists.get(0).getClient().getId(), client.getId());
     }
 
     @Test
     void findByClientId() {
+        Client client = createOrGetClient("createOrGetClient", "123456");
+        WishList wishList = createNewWishList(
+                client,
+                createOrGetProduct("createOrGetProduct", "createOrGetProduct"));
+        assertNotNull(wishList.getId());
+
+        wishList = wishListService.findByClientId(client.getId());
+        assertEquals(wishList.getClient().getId(), client.getId());
+        // client not found
+        assertNull(wishListService.findByClientId(-1L));
     }
 
     @Test
     void deleteById() {
+        WishList wishList = createNewWishList(
+                createOrGetClient("createOrGetClient", "123456"),
+                createOrGetProduct("createOrGetProduct", "createOrGetProduct"));
+        assertNotNull(wishList.getId());
+        Optional<WishList> wishListOptional = wishListService.findById(wishList.getId());
+        assertTrue(wishListOptional.isPresent());
+        assertEquals(wishList.getId(), wishListOptional.get().getId());
+        wishListService.deleteById(wishList.getId());
+        assertTrue(wishListService.findById(wishList.getId()).isEmpty());
     }
 }
