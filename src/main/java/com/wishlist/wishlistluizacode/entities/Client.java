@@ -18,8 +18,13 @@ public class Client implements Serializable {
     private String name;
     private String cpf;
 
-    public Client(){
+    public Client() {
 
+    }
+
+    public Client(String name, String cpf) {
+        this.name = name;
+        this.cpf = cpf;
     }
 
     public Client(Long id, String name, String cpf) {
