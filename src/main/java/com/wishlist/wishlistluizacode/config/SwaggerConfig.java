@@ -31,7 +31,7 @@ public class SwaggerConfig {
     private ApiInfo metaInfo(){
         ApiInfo apiInfo = new ApiInfo(
                 "Luiza Code",
-                "API REST Wishlist Luiza<Code>",
+                "API REST Wishlist Luiza Code",
                 "1.0",
                 "Terms of Service",
                 new Contact("Carla Lima/ Lara Rezende / Lívia Silva / Patrícia Batalha",
