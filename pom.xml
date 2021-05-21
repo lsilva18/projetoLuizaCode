@@ -96,12 +96,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <configuration>
-                    <nonFilteredFileExtensions>
-                        <nonFilteredFileExtension>txt</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>sql</nonFilteredFileExtension>
-                    </nonFilteredFileExtensions>
-                </configuration>
+                <version>3.1.0</version>
             </plugin>
         </plugins>
     </build>
